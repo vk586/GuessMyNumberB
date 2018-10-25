@@ -4,28 +4,66 @@ public class Main {
 
     public static void main(String[] args) {
 
-        int guess = 0;
-        int lnum = 0;
-        int hnum = 100;
+        Guess player = new Guess();
+
         boolean found = false;
         boolean answered = false;
-
-        Scanner reader = new Scanner(System.in);
-        Scanner read = new Scanner(System.in);
-
         String answer = "";
+        int count = 0;
 
-        do {
-            guess = (hnum + lnum + 1) / 2;
-            System.out.println("Is your number " + guess + "?");
-            answer = read.nextLine();
+        Scanner read = new Scanner(System.in);
+        Scanner read2 = new Scanner(System.in);
 
-            if (answer.equals("low")) {  //the number is low
-                lnum = guess + 1;
+        System.out.println("Hi! Welcome to the name game. I will give you a list of names to choose from" +
+                " and you will choose the one that I \nwill have to guess (1). \nOr, we can do the opposite" +
+                " by having me pick a name and you will have to guess (2).");
 
-            } else if (answer.equals("high")) { // the number is high
-                hnum = guess - 1;
+        String ready = read.next();
+        if (ready.equals("1")) {
+            System.out.println("Alright! I will give you a list of names to choose from. When I start guessing," +
+                    " I need you to tell me if my\nguess is correct, or if not, tell me if your name is" +
+                    " closer to a or z from my guess.\nType anything to get started.");
+            answer = read.next();
+            if (!answer.equals("")) {
+                player.printNames();
             }
-        } while (!answer.equals("yes"));
+            while(!found) {
+                String guess = player.guessName(answer);
+                if (guess.equals("true")) {
+                    found = true;
+                    System.out.println("Awesome! That only took me " + count + " tries.");
+                    break;
+                }
+                else {
+                    System.out.println(guess);
+                    count++;
+                }
+                answer = read.next();
+            }
+        }
+
+        else if (ready.equals("2")) {
+            System.out.println("Type anything to get started.");
+            answer = read.next();
+            if (!answer.equals("")) {
+                player.printNames();
+            }
+            System.out.println("That's the list. I've already picked out a name. Start by telling me which one" +
+                    " you think it is, and I will tell\nyou if it is correct. If not, I will tell you if" +
+                    " it is closer to a or to z.");
+            System.out.println("Please refer to the name by its number. Take a guess.");
+            while (!found) {
+                int guess = read2.nextInt();
+                if (player.checkName(guess).equals("true")) {
+                    System.out.println("You got it! That only took you " + count + " tries.");
+                    break;
+                }
+                else {
+                    System.out.println(player.checkName(guess));
+                    count++;
+                }
+            }
+        }
+
     }
 }
